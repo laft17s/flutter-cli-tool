@@ -9,7 +9,9 @@ void main(List<String> arguments) {
   final projectName = arguments[0];
   final libDir = Directory('$projectName/lib');
   final dirs = [
-    'core/di',
+    'core/errors',
+    'core/usecases',
+    'core/utils',
     'data/datasources',
     'data/models',
     'data/repositories',
