@@ -1,33 +1,62 @@
 import 'dart:io';
 
 void main(List<String> arguments) {
-  final projectName =
-      arguments.isNotEmpty ? arguments[0] : 'new_flutter_project';
+  if (arguments.isEmpty) {
+    print('Por favor, proporciona el nombre del proyecto.');
+    return;
+  }
+
+  final projectName = arguments[0];
+  final libDir = Directory('$projectName/lib');
   final dirs = [
-    'lib/core/di',
-    'lib/data/datasources',
-    'lib/data/models',
-    'lib/data/repositories',
-    'lib/domain/entities',
-    'lib/domain/repositories',
-    'lib/domain/usecases',
-    'lib/presentation/screens',
-    'lib/presentation/viewmodels',
-    'lib/presentation/widgets'
+    'core/di',
+    'data/datasources',
+    'data/models',
+    'data/repositories',
+    'domain/entities',
+    'domain/repositories',
+    'domain/usecases',
+    'presentation/screens',
+    'presentation/viewmodels',
+    'presentation/widgets'
   ];
 
   final projectDir = Directory(projectName);
 
   if (projectDir.existsSync()) {
     print('El directorio $projectName ya existe.');
-    return;
+
+    if (libDir.existsSync()) {
+      print('La carpeta lib ya existe.');
+      for (var dir in dirs) {
+        Directory('$projectName/lib/$dir').createSync(recursive: true);
+      }
+      print('Se han creado los subdirectorios en lib.');
+    } else {
+      print('La carpeta lib no existe. Creando...');
+      libDir.createSync();
+      for (var dir in dirs) {
+        Directory('$projectName/lib/$dir').createSync(recursive: true);
+      }
+      File('$projectName/lib/main.dart').writeAsStringSync(
+          '//TODO: If you thought about it, you can develop it!!');
+      print(
+          'La estructura de directorios y el archivo main.dart se han creado en lib.');
+    }
+  } else {
+    projectDir.createSync(recursive: true);
+    print('Se creó el directorio $projectName.');
+
+    libDir.createSync();
+    print('Se creó la carpeta lib.');
+
+    for (var dir in dirs) {
+      Directory('$projectName/lib/$dir').createSync(recursive: true);
+    }
+
+    File('$projectName/lib/main.dart').writeAsStringSync(
+        '//TODO: If you thought about it, you can develop it!!');
+    print(
+        'La estructura de directorios y el archivo main.dart se han creado en lib.');
   }
-
-  projectDir.createSync(recursive: true);
-
-  for (var dir in dirs) {
-    Directory('$projectName/$dir').createSync(recursive: true);
-  }
-
-  print('Estructura de directorios creada en $projectName.');
 }
